@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konzertumfrage - HMT Rostock Dezember 2024</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .checkbox-cell {
+            text-align: center;
+            width: 80px;
+        }
+        
+        input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+        
+        .date-time {
+            font-weight: 600;
+            color: #667eea;
+            white-space: nowrap;
+        }
+        
+        .concert-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .concert-details {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .vote-count {
+            text-align: center;
+            font-weight: 600;
+            color: #764ba2;
+        }
+        
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 600;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .results h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .result-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .vote-bar {
+            height: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            color: white;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 15px;
+            }
+            
+            table {
+                font-size: 0.9em;
+            }
+            
+            th, td {
+                padding: 10px 5px;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 Konzertumfrage Dezember 2024</h1>
+            <p class="subtitle">Hochschule für Musik und Theater Rostock</p>
+        </header>
+        
+        <div class="content">
+            <p style="margin-bottom: 20px; color: #666; text-align: center;">
+                Bitte wählen Sie die Konzerte aus, die Sie besuchen möchten:
+            </p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Datum & Uhrzeit</th>
+                        <th>Konzert</th>
+                        <th>Stimmen</th>
+                        <th>Interessiert?</th>
+                    </tr>
+                </thead>
+                <tbody id="concertTable">
+                    <tr>
+                        <td class="date-time">05. Dez, 20:00</td>
+                        <td>
+                            <div class="concert-title">Klavierabend</div>
+                            <div class="concert-details">Studierende der Klasse Lilit Grigoryan</div>
+                        </td>
+                        <td class="vote-count" data-votes="0">0</td>
+                        <td class="checkbox-cell">
+                            <input type="checkbox" data-concert="0">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="date-time">09. Dez, 20:00</td>
+                        <td>
+                            <div class="concert-title">Töne sprechen - Worte klingen</div>
+                            <div class="concert-details">Liederabend, Klasse Liedgestaltung Prof. Karola Theill</div>
+                        </td>
+                        <td class="vote-count" data-votes="0">0</td>
+                        <td class="checkbox-cell">
+                            <input type="checkbox" data-concert="2">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="date-time">10. Dez, 20:00</td>
+                        <td>
+                            <div class="concert-title">Gesangsabend</div>
+                            <div class="concert-details">Studierende der Klasse Prof. Klaus Häger</div>
+                        </td>
+                        <td class="vote-count" data-votes="0">0</td>
+                        <td class="checkbox-cell">
+                            <input type="checkbox" data-concert="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="date-time">11. Dez, 20:00</td>
+                        <td>
+                            <div class="concert-title">Violaabend</div>
+                            <div class="concert-details">Studierende der Klasse Prof. Piotr Szumieł</div>
+                        </td>
+                        <td class="vote-count" data-votes="0">0</td>
+                        <td class="checkbox-cell">
+                            <input type="checkbox" data-concert="5">
+                        </td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+            
+            <div class="submit-section">
+                <div style="margin-bottom: 20px;">
+                    <label for="voterName" style="display: block; margin-bottom: 8px; font-weight: 600; color: #667eea;">
+                        Ihr Name (optional):
+                    </label>
+                    <input type="text" id="voterName" placeholder="z.B. Anna Müller" 
+                           style="padding: 12px; width: 100%; max-width: 400px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1em;">
+                </div>
+                <button onclick="submitVote()">Abstimmen</button>
+                <p style="margin-top: 15px; color: #666; font-size: 0.9em;">
+                    Alle Konzerte finden im Kammermusiksaal, hmt Rostock statt<br>
+                    Beim St.-Katharinenstift 8, 18055 Rostock
+                </p>
+            </div>
+            
+            <div class="results" id="results">
+                <h3>Aktuelle Abstimmungsergebnisse:</h3>
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Load votes from localStorage
+        let votes = JSON.parse(localStorage.getItem('concertVotes')) || [0, 0, 0, 0, 0, 0, 0, 0];
+        let voters = JSON.parse(localStorage.getItem('concertVoters')) || [[], [], [], [], [], [], [], []];
+        
+        // Update vote counts on page load
+        function updateVoteCounts() {
+            const voteCells = document.querySelectorAll('.vote-count');
+            voteCells.forEach((cell, index) => {
+                cell.textContent = votes[index];
+                cell.setAttribute('data-votes', votes[index]);
+            });
+        }
+        
+        updateVoteCounts();
+        
+        // Submit vote function
+        function submitVote() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const voterNameInput = document.getElementById('voterName');
+            const voterName = voterNameInput.value.trim() || 'Anonym';
+            let selectedCount = 0;
+            
+            checkboxes.forEach((checkbox, index) => {
+                if (checkbox.checked) {
+                    votes[index]++;
+                    voters[index].push(voterName);
+                    selectedCount++;
+                    checkbox.checked = false;
+                }
+            });
+            
+            if (selectedCount === 0) {
+                alert('Bitte wählen Sie mindestens ein Konzert aus.');
+                return;
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('concertVotes', JSON.stringify(votes));
+            localStorage.setItem('concertVoters', JSON.stringify(voters));
+            
+            // Clear name input
+            voterNameInput.value = '';
+            
+            // Update display
+            updateVoteCounts();
+            showResults();
+            
+            // Show confirmation
+            alert(`Vielen Dank! Ihre Stimme für ${selectedCount} Konzert${selectedCount > 1 ? 'e' : ''} wurde registriert.`);
+        }
+        
+        // Show results
+        function showResults() {
+            const resultsDiv = document.getElementById('results');
+            const resultsContent = document.getElementById('resultsContent');
+            
+            const concerts = [
+                '05. Dez, 20:00 - Klavierabend',
+                '09. Dez, 17:00 - Weihnachtskonzert',
+                '09. Dez, 20:00 - Töne sprechen - Worte klingen',
+                '10. Dez, 17:00 - Oboenkonzert am Nachmittag',
+                '10. Dez, 20:00 - Gesangsabend',
+                '11. Dez, 20:00 - Violaabend',
+                '17. Dez, 17:00 - Violoncellokonzert am Nachmittag',
+                '19. Dez, 17:00 - Klavierkonzert am Nachmittag'
+            ];
+            
+            const maxVotes = Math.max(...votes, 1);
+            
+            let html = '';
+            concerts.forEach((concert, index) => {
+                const percentage = (votes[index] / maxVotes) * 100;
+                const voterList = voters[index].length > 0 
+                    ? `<div style="margin-top: 8px; font-size: 0.9em; color: #666;">
+                         👤 ${voters[index].join(', ')}
+                       </div>` 
+                    : '';
+                
+                html += `
+                    <div class="result-item">
+                        <div style="flex: 1;">
+                            <strong>${concert}</strong>
+                            <div style="margin-top: 5px;">
+                                <div class="vote-bar" style="width: ${percentage}%;">
+                                    ${votes[index]} Stimme${votes[index] !== 1 ? 'n' : ''}
+                                </div>
+                            </div>
+                            ${voterList}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            resultsContent.innerHTML = html;
+            resultsDiv.classList.add('show');
+        }
+        
+        // Show results on load if there are votes
+        if (votes.some(v => v > 0)) {
+            showResults();
+        }
+    </script>
+</body>
+</html>
